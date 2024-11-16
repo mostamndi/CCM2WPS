@@ -47,4 +47,16 @@ is_wind_earth_relative	logical	required
    real      :: XFCST, XLVL
    character :: startloc*8
    real      :: startlon, startlat, dx, dy, xlonc, truelat1, truelat2, nlats, earth_radius
+**Instalation**
+No need to install. Eighter you can [git clone](https://github.com/mostamndi/CCM2WPS.git) or directly download it from https://github.com/mostamndi/CCM2WPS.git
+
+**Run Code**
+To run the simply modify file paths in lima.py or lima_local.py and then just type:
+python3 lima.py
+
+to run at RSHU HPC
+python3 lima_local.py 
+
+
+
 
