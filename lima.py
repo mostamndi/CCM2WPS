@@ -51,16 +51,15 @@ unit_3d = ["m", "K", "m s-1", "m s-1", "kg kg-1"]
 unit_2d = ["K", "m s-1", "m s-1", "kg kg-1", "0/1 Flag", "Pa", "Pa", "K", "fraction", "K", "kg m-2", "m"]
 unit_soil=["K", "k", "K", "K", "m3 m-3", "m3 m-3", "m3 m-3", "m3 m-3"]
 
-desc_3d = []
-desc_2d = []
-desc_soil = []
-
-lvl_2d  = []
-lvl_soil = []
-
+desc_3d = ["Height", "Temperature", "U", "V", "Specific humidity"]
+desc_2d = ["Temperature", "U10", "V10", "Q2", "Land/Sea flag", "Surface Pressure", "Sea-level Pressure",
+           "Sea-Surface Temperature", "Sea-Ice Fraction", "Sea-Surface Temperature", "Snow Water Equivalent",
+           "Physical Snow Depth"]
+desc_soil = ["T of 0-10 cm ground layer", "T of 10-100 cm ground layer",
+             "Soil moisture of 0-10 cm ground layer", "Soil moisture of 10-100 cm ground layer"]
 
 files_3d = ["HHH.STD", "TTT.STD", "UUU.STD", "VVV.STD", "QQQ.STD"]
-files_2d = ["T2.STD", "U10.STD", "V10.STD", "Q2.STD", "???.STD", "PSURF.STD", "PS.STD", "TSS.STD", "???.STD", "SS.STD",]
+files_2d = ["T2.STD", "U10.STD", "V10.STD", "Q2.STD", "???.STD", "PSURF.STD", "PS.STD", "TSS.STD", "???.STD", "SS.STD"]
 files_soil=["???.STD", "???.STD","WS.STD", "WW.STD"]
 
 
@@ -93,7 +92,7 @@ for itime in range(Ntim):
         v2d = np.fromfile(f"{file_path_2d}/{files_2d[i]}", dtype=np.float32,
                           offset=itime * Nlon * Nlat * 4, count=Nlon * Nlat)
         ccm.data = v2d.reshape([Nlat, Nlon])
-        ccm.setLevel(lvl=20100)
+        ccm.setLevel(lvl=201300.) if v=="PMSL" else ccm.setLevel(lvl=200100.)
         ccm.writeFile()
         print(f"2D variable ({v}) for time step {itime} added to file")
     # Soil Variables
@@ -102,6 +101,7 @@ for itime in range(Ntim):
         s2d = np.fromfile(f"{file_path_soil}/{files_soil[j]}", dtype=np.float32,
                           offset=itime * Nlon * Nlat * 4, count=Nlon * Nlat)
         ccm.data = s2d.reshape([Nlat, Nlon])
+        ccm.setLevel(lvl=200100.)
         ccm.writeFile()
         print(f"Soil variable ({s}) for time step {itime} added to file")
     # 3D Variables
