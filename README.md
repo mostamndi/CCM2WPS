@@ -57,6 +57,15 @@ python3 lima.py
 to run at RSHU HPC
 python3 lima_local.py 
 
+** Creating met_em Files **
+To run metgrid.exe, you have to replace the original METGRID.TBL with the one from this folder. 
+Also, you need to modify namelist.wps at metgrid section replace FILE with CCM:
+
+&metgrid
+ fg_name              = 'CCM'
+ io_form_metgrid      = 2
+ opt_metgrid_tbl_path = './'
+/
 
 
 
