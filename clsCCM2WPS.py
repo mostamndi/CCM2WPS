@@ -41,7 +41,7 @@ by RSHU and LIMA members.
 Details:
 Developer: Suleiman Mostamandi
 (Contact: suleiman@mostamandi.ru)
-Version: 1.0
+Version: 1.2
 Date: 16 November 2024
 Requirements:
 Python 3 or higher
@@ -51,7 +51,7 @@ NumPy 1.26 or higher
 
 
 class CCM2WPS:
-    CenterName = ("%32.32s") % "RSHU-CCM-MODEL"
+    CenterName = "{0:32s}".format("RSHU-CCM-MODEL")
     PREFIX = "CCM"
     header = None
     data = None
@@ -68,13 +68,13 @@ class CCM2WPS:
         self.eradius = eradius
         self.slon = slon
         self.slat = slat
-        self.sloc = ("%8.8s") % sloc
+        self.sloc = "{0:8s}".format(sloc)
         self.iswin = False
         return
 
     def setDateTime(self, newval="1980-01-01_00:00:00"):
         tmp = datetime.strptime(newval, "%Y-%m-%d_%H:%M:%S")
-        self.hdate = ("%24.24s") % newval
+        self.hdate = "{0:24s}".format(newval)
         self.year = tmp.year
         self.month = tmp.month
         self.day = tmp.day
@@ -82,9 +82,9 @@ class CCM2WPS:
         return
 
     def setFieldName(self, varname="TT", vardesc="Temperature", varunit="K"):
-        self.field = ("%9.9s") % varname
-        self.desc = ("%46.46s") % vardesc
-        self.unit = ("%25.25s") % varunit
+        self.field = "{0:9s}".format(varname)
+        self.desc  = "{0:46s}".format(vardesc) 
+        self.unit  = "{0:25s}".format(varunit)
         return
 
     def setLevel(self, lvl=200100.):
@@ -110,12 +110,12 @@ class CCM2WPS:
         packsize = calcsize(packstr)
         headerpack = pack(
             packstr,
-            bytes(f"{self.hdate: <24}", "utf-8"),  # hdate
+            bytes(f"{self.hdate: <24}", "ascii"),  # hdate "utf-8"
             0.0,  # xfcst
-            bytes(f"{self.CenterName: <32}", "utf-8"),  # map_source
-            bytes(f"{self.field: <9}", "utf-8"),  # field
-            bytes(f"{self.unit: <25}", "utf-8"),  # unit
-            bytes(f"{self.desc: <46}", "utf-8"),  # desc
+            bytes(f"{self.CenterName: <32}", "ascii"),  # map_source
+            bytes(f"{self.field: <9}", "ascii"),  # field
+            bytes(f"{self.unit: <25}", "ascii"),  # unit
+            bytes(f"{self.desc: <46}", "ascii"),  # desc
             self.level,  # xlvl
             self.Nx,  # NX
             self.Ny,  # NY
@@ -124,20 +124,22 @@ class CCM2WPS:
         outfile.write(pack(">i", packsize))
         outfile.write(headerpack)
         outfile.write(pack(">i", packsize))
+        #packstr = ">8s 5f"
         packstr = ">8s 5f"
         packsize = calcsize(packstr)
         projpack = pack(
             packstr,
-            bytes(f"{self.sloc: <8}", "utf-8"),
-            self.slat,
-            self.slat,
-            self.dlon,
-            self.dlat,
-            self.eradius,
+            bytes(f"{self.sloc: <8}", "ascii"),
+            self.slat,  # START latitude
+            self.slon,  # START longitude 
+            self.dlat,  # DX
+            self.dlon,  # DY
+            self.eradius,   # Seems that I was wrong, it needs for this projection!!
         )
         outfile.write(pack(">i", packsize))
         outfile.write(projpack)
         outfile.write(pack(">i", packsize))
+    
         packstr = ">i"
         packsize = calcsize(packstr)
         relpack = pack(packstr, self.iswin)
