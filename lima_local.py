@@ -104,7 +104,8 @@ for itime in range(Ntim):
         ccm.setFieldName(varname=v, varunit=unit_2d[i], vardesc=desc_2d[i])
         v2d = np.fromfile(f"{file_path_2d}/{files_2d[i]}", dtype=np.float32,
                           offset=itime * Nlon * Nlat * 4, count=Nlon * Nlat)
-        ccm.data = v2d.reshape([Nlat, Nlon])
+        #ccm.data = v2d.reshape([Nlat, Nlon])
+        ccm.data = v2d.reshape([Nlat, Nlon])*100000. if v =="PSFC" else v2d.reshape([Nlat, Nlon])  # converting to Pa
         ccm.setLevel(lvl=201300.) if v=="PMSL" else ccm.setLevel(lvl=200100.)
         ccm.writeFile()
         print(f"2D variable ({v}) for time step {itime} added to file")
