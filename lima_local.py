@@ -121,7 +121,9 @@ for itime in range(Ntim):
         ccm.setFieldName(varname=s, varunit=unit_soil[j], vardesc=desc_soil[j])
         s2d = np.fromfile(f"{file_path_soil}/{files_soil[j]}", dtype=np.float32,
                           offset=itime * Nlon * Nlat * 4, count=Nlon * Nlat)
-        ccm.data = s2d.reshape([Nlat, Nlon])
+        lbound, hbound = int(s[2:5]), int(s[5:8])
+        thickness = (hbound - lbound) * 10. # soil layer thikness in (m)
+        ccm.data = s2d.reshape([Nlat, Nlon]) / thickness # converting mm to m3/m3 
         ccm.setLevel(lvl=200100.)
         ccm.writeFile()
         print(f"Soil variable ({s}) for time step {itime} added to file")
