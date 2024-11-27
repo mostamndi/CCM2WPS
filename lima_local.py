@@ -64,6 +64,10 @@ desc_3d = ["Height", "Temperature", "U", "V", "Specific humidity"]
 desc_2d = ["Temperature", "U10", "V10", "Q2", "Land/Sea flag", "Surface Pressure", "Sea-level Pressure",
            "Sea-Surface Temperature", "Sea-Ice Fraction", "Sea-Surface Temperature", "Snow Water Equivalent",
            "Physical Snow Depth"]
+
+desc_2d = ["Temperature", "U10", "V10", "Q2", "Surface Pressure", "Sea-level Pressure",
+           "Sea-Surface Temperature", "Physical Snow Depth"]
+
 desc_soil = ["T of 0-10 cm ground layer", "T of 10-100 cm ground layer",
              "Soil moisture of 0-10 cm ground layer", "Soil moisture of 10-100 cm ground layer"]
 
@@ -111,8 +115,8 @@ for itime in range(Ntim):
         else:
             ccm.data = v2d.reshape([Nlat, Nlon])
 
-        #ccm.data = v2d.reshape([Nlat, Nlon])
-        ccm.data = v2d.reshape([Nlat, Nlon])*100000. if v =="PSFC" else v2d.reshape([Nlat, Nlon])  # converting to Pa
+        # ccm.data = v2d.reshape([Nlat, Nlon])
+        # ccm.data = v2d.reshape([Nlat, Nlon])*100000. if v =="PSFC" else v2d.reshape([Nlat, Nlon])  # converting to Pa
         ccm.setLevel(lvl=200100.)
         ccm.writeFile()
         print(f"2D variable ({v}) for time step {itime} added to file")
