@@ -16,7 +16,7 @@ from netCDF4 import date2num
 #10  'OC hydrophylic'     0.06E-6
 
 
-data_path = "/home/u004/1980_CCM/RUN_1/130/6HOUR3D"
+data_path = "../wps"
 files =["SO2", "SULF", "OH", "O3", "NO2", "MDLF", "MDBF",
         "SSLF", "SSBF", "BCHB", "BCHL", "OCHB", "OCHL", 'CH4']
 
@@ -48,7 +48,7 @@ lons = np.linspace(-180, 175, 72)
 lats = np.linspace(-88, 88, 45)
 dates = date2num([sdate + timedelta(hours=i*6) for i in range(Ntim)], units=f"minutes since {sdate.strftime('%Y-%m-%d %H:00:00')}", calendar='gregorian')
 
-var_3d = ["SO2", "SO4", "OH", "O3", "NO2", "DUST1", "DUST2",
+var_3d = ["SO2", "SO4", "OH", "O3", "NO2", "DU001", "DU002",
           "SS001", "SS002","BCPHOBIC", "BCPHILIC", "OCPHOBIC", "OCPHILIC", "CH4"]
 
 dimension = ['time', 'lev', 'lat', 'lon']
@@ -59,8 +59,8 @@ attrs = [{'standard_name': 'SO2', 'long_name': 'SO2', 'units': 'kg/kg', '_FillVa
          {'standard_name': 'OH', 'long_name': 'OH', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
          {'standard_name': 'O3', 'long_name': 'O3', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
          {'standard_name': 'NO2', 'long_name': 'NO2', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
-         {'standard_name': 'DUST1', 'long_name': 'DUST1', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
-         {'standard_name': 'DUST2', 'long_name': 'DUST2', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
+         {'standard_name': 'DU001', 'long_name': 'DUST1', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
+         {'standard_name': 'DU002', 'long_name': 'DUST2', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
          {'standard_name': 'SS001', 'long_name': 'SS001', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
          {'standard_name': 'SS002', 'long_name': 'SS002', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
          {'standard_name': 'BCPHOBIC', 'long_name': 'BCPHOBIC', 'units': 'kg/kg', '_FillValue':1.E+15, 'missing_value':1.E+15},
