@@ -3,7 +3,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 
 import config
 import re
-from netCDF4 import Dataset, date2num
+from netCDF4 import Dataset, date2num, num2date
 from datetime import datetime, timedelta
 import numpy as np
 from scipy import interpolate
@@ -29,7 +29,7 @@ mer_number_of_z_points=0
 numbers = re.compile(r'(\d+)')
 def numericalSort(value):
     parts = numbers.split(value)
-    return parts[9]
+    return parts[7]
 
 def get_file_index_by_time(time):
     return mera_times_files.get(time)
@@ -157,14 +157,15 @@ def initialise():
 
     #number of times in  mera file
     times_per_file=merra_f.variables['time'].size
-    date = date2num(merra_f.variables['time'][:], units=merra_f.variables['time'].units, calendar='gregorian')
+    date = num2date(merra_f.variables['time'][:], units=merra_f.variables['time'].units, calendar='gregorian', only_use_cftime_datetimes=False)
+    print(date)
     merra_f.close()
 
     index=0
     for merra_file in merra_files:
         #date=numbers.split(merra_file)[9]
         #for i in range(0,times_per_file,1):
-        for i, t in date:
+        for i, t in enumerate(date):
             mera_times_files.update({t.strftime("%Y-%m-%d_%H:%M:%S"):index})
             mera_times.update({t.strftime("%Y-%m-%d_%H:%M:%S"):i})
         index=index+1
